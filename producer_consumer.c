@@ -103,7 +103,7 @@ int consumer_thread_function(void *pv)
         index = total_no_of_process_consumed % buffSize;
         task = buffer[index];
         if(kthread_should_stop()) {break;}
-        if(end_flad == 1) {break;}
+        if(end_flag == 1) {break;}
 
         unsigned long long ktime = ktime_get_ns();
         unsigned long long process_time_elapsed = (ktime - task->start_time) / 1000000000;
@@ -115,7 +115,7 @@ int consumer_thread_function(void *pv)
 
         no_of_process_consumed++;
         total_no_of_process_consumed++;
-        printk(KERN_INFO"[kConsumer-%d] Consumed Item#-%d on buffer index:%d::PID:%lu \t Elapsed Time %llu:%llu:%llu \n", *threadID, no_of_process_consumed, index, task->pid, process_time_hr, process_time_min, process_time_sec);
+        printk("[kConsumer-%d] Consumed Item#-%d on buffer index:%d::PID:%lu \t Elapsed Time %llu:%llu:%llu \n", *threadID, no_of_process_consumed, index, task->pid, process_time_hr, process_time_min, process_time_sec);
         up(&mutex);
         up(&empty);
     }
@@ -145,17 +145,17 @@ static int thread_init_module(void)
         //Check to see if producer thread was created successfully
         if(!IS_ERR(ctx_producer_thread))
         {
-            printk(KERN_INFO "[kProducer-1] kthread Producer Created Successfully");
+            printk("[kProducer-1] kthread Producer Created Successfully");
         }
         
-        for(index = 0; index < cons; index++)
+        for(int index = 0; index < cons; index++) // -----------------------------------
         {
             int* threadID = kmalloc(sizeof(int), GFP_KERNEL);
             *threadID = index+1;
             ctx_consumer_thread[index] = kthread_run(consumer_thread_function, (void*)threadID, "Consumer");
             if(!IS_ERR(ctx_consumer_thread[index]))
             {
-                printk(KERN_INFO "[kConsumer-%d] kthread Consumer Created Successfully\n", index);
+                printk("[kConsumer-%d] kthread Consumer Created Successfully\n", index);
             }
         }
     }
@@ -217,9 +217,9 @@ static void thread_exit_module(void)
         unsigned long long total_time_min = (total_time_elapsed - 3600 * total_time_hr) / 60;
         unsigned long long total_time_sec = (total_time_elapsed - 3600 * total_time_hr) - (total_time_min * 60);
 
-        printk(KERN_INFO"Total number of items produced: %d", total_no_of_process_produced);
-        printk(KERN_INFO"Total number of items consumed: %d", total_no_of_process_consumed);
-        printk(KERN_INFO"The total elapsed time of all processes for UID %d is \t%llu:%llu:%llu  \n", uuid, total_time_hr, total_time_min, total_time_sec);
+        printk("Total number of items produced: %d", total_no_of_process_produced);
+        printk("Total number of items consumed: %d", total_no_of_process_consumed);
+        printk("The total elapsed time of all processes for UID %d is \t%llu:%llu:%llu  \n", uuid, total_time_hr, total_time_min, total_time_sec);
     }
 
     PCINFO("CSE330 Project 2 Kernel Module Removed\n");
