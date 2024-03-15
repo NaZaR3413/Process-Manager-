@@ -1,6 +1,6 @@
 # CSE330: Operating Systems 
 
-Please follow the below steps to test your Project-2. (Due: **25th October 2022 11:59 PM**)
+Please follow the below steps to test your Project-2. (Due: **14th March 2024 11:59 PM**)
 
 - Download the zip of this git repository.
 - Unzip the repository.
