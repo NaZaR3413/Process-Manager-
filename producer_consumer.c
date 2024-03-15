@@ -229,6 +229,6 @@ module_init(thread_init_module);
 module_exit(thread_exit_module);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("GroupTeamAlpha");
+MODULE_AUTHOR("Nilay Patel, Eyasu Abebe, Leobardo Montes De Oca Torres, Aidan Daly");
 MODULE_DESCRIPTION("CSE330 Project 2\n");
 MODULE_VERSION("0.1");
